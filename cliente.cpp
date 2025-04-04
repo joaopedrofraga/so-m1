@@ -18,5 +18,7 @@ int main(){
         close(fd);
 
         cout << "Comando enviado para o servidor: " << opcao << endl;
+
+        fflush(stdin); // Isso é um teste para limpar o buffer
     }
 }

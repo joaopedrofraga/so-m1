@@ -1,7 +1,8 @@
 #include <iostream>
-#include <pthread>
+#include <pthread.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include "banco.hpp"
 
 using namespace std;
@@ -22,6 +23,20 @@ int main(){
         read(fd, buffer, sizeof(buffer));
         close(fd);
 
-        cout << "Comando recebido do cliente: " << buffer << endl;
+        if(buffer == "1"){
+            cout << "INSERT" << endl;
+        }
+        else if(buffer == "2"){
+            cout << "UPDATE" << endl;
+        }
+        else if(buffer == "3"){
+            cout << "DELETE" << endl;
+        }
+        else if(buffer == "4"){
+            cout << "SELECT" << endl;
+        }
+        else{
+            cout << "Comando inválido!" << endl;
+        }
     }
 }
