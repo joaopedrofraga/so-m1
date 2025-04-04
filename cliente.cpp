@@ -1,4 +1,7 @@
 #include <iostream>
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -7,7 +10,7 @@ int main(){
     char opcao = '0';
 
     while(true){
-        cout << 'Digite um numero: ' << endl;
+        cout << "Digite um numero: ";
         cin >> opcao;
 
         int fd = open(fifoPath, O_WRONLY);
