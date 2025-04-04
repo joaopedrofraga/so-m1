@@ -22,5 +22,7 @@ int main(){
         int fd = open(fifoPath, O_RDONLY);
         read(fd, buffer, sizeof(buffer));
         close(fd);
+
+        cout << "Comando recebido do cliente: " << buffer << endl;
     }
 }
