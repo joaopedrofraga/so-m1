@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <string.h>
 #include "banco.hpp"
 
 using namespace std;
@@ -22,21 +23,34 @@ int main(){
         int fd = open(fifoPath, O_RDONLY);
         read(fd, buffer, sizeof(buffer));
         close(fd);
+        cout << "Comando recebido: " << buffer << endl;
+        char opcao = buffer[0];
 
-        if(buffer == "1"){
-            cout << "INSERT" << endl;
-        }
-        else if(buffer == "2"){
-            cout << "UPDATE" << endl;
-        }
-        else if(buffer == "3"){
-            cout << "DELETE" << endl;
-        }
-        else if(buffer == "4"){
-            cout << "SELECT" << endl;
-        }
-        else{
-            cout << "Comando inválido!" << endl;
+        switch(opcao){
+            case '1':
+                //pthread_create(&tr_i, &attr, inserir, (void*)buffer);
+                escreverMensagemParaCliente("Inserido com sucesso!");
+                break;
+            case '2':
+                //pthread_create(&tr_u, &attr, atualizar, (void*)buffer);
+                escreverMensagemParaCliente("Atualizado com sucesso!");
+                break;
+            case '3':
+                //pthread_create(&tr_d, &attr, deletar, (void*)buffer);
+                escreverMensagemParaCliente("Deletado com sucesso!");
+                break;
+            case '4':
+                //pthread_create(&tr_s, &attr, selecionar, (void*)buffer);
+                escreverMensagemParaCliente("Selecionado com sucesso!");
+                break;
+            default:
+                escreverMensagemParaCliente("ERRO AO PROCESSAR!");
         }
     }
+}
+
+void escreverMensagemParaCliente(const char* mensagem){
+    int fd = open("/tmp/fifo_cliente", O_WRONLY);
+    write(fd, mensagem, strlen(mensagem) + 1); // CORRETO
+    close(fd);
 }

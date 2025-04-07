@@ -14,5 +14,9 @@ void *db_insert();
 void *db_update();
 void *db_delete();
 void *db_select();
+void escreverMensagemParaCliente(const char* mensagem);
+
+bool validarOpcao(char op);
+string getMensagemDoServidor();
 
 #endif
