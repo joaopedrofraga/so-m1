@@ -2,6 +2,14 @@
     "files.associations": {
         "iostream": "cpp",
         "string": "cpp",
-        "ostream": "cpp"
-    }
+        "ostream": "cpp",
+        "xstring": "cpp",
+        "xlocmes": "cpp",
+        "xlocinfo": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "utility": "cpp",
+        "xutility": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
