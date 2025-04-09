@@ -45,22 +45,22 @@ int main(){
         switch(opcao){
             case '1':
                 pthread_create(&tr_i, &attr, db_insert, NULL);
-                pthread_join(tr_i, NULL); 
+                //pthread_join(tr_i, NULL); 
                 escreverMensagemParaCliente("\nInserido com sucesso!");
                 break;
             case '2':
                 pthread_create(&tr_u, &attr, db_update, NULL);
-                pthread_join(tr_u, NULL);
+                //pthread_join(tr_u, NULL);
                 escreverMensagemParaCliente("Atualizado com sucesso!");
                 break;
             case '3':
                 pthread_create(&tr_d, &attr, db_delete, NULL);
-                pthread_join(tr_d, NULL);
+                //pthread_join(tr_d, NULL);
                 escreverMensagemParaCliente("Deletado com sucesso!");
                 break;
             case '4':
                 pthread_create(&tr_s, &attr, db_select, NULL);
-                pthread_join(tr_s, NULL);
+                //pthread_join(tr_s, NULL);
                 escreverMensagemParaCliente("Selecionado com sucesso!");
                 break;
             default:
@@ -114,7 +114,7 @@ void *db_update(void *param){
     vector<string> partes = getPartes(buffer);
 
     pthread_mutex_lock(&mutex);
-    if(partes[0] == '1'){
+    if(partes[0] == "1"){
         for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
             if (it->id == stoi(partes[1])) {
                 cout << "Registro ATUALIZADO: ID = " << it->id << ", Nome = " << it->nome << endl;
