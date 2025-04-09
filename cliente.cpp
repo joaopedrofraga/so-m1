@@ -54,7 +54,7 @@ bool validarOpcao(char op){
 
 string getMensagemDoServidor(){
     int fd = open("/tmp/fifo_server_message", O_RDONLY);
-    char buffer[100] = {0}; // zerar buffer
+    char buffer[10000] = {0}; // zerar buffer
     read(fd, buffer, sizeof(buffer));
     close(fd);
     return string(buffer);
