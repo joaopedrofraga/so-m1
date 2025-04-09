@@ -61,7 +61,7 @@ int main(){
             case '4':
                 pthread_create(&tr_s, &attr, db_select, NULL);
                 //pthread_join(tr_s, NULL);
-                escreverMensagemParaCliente("Selecionado com sucesso!");
+                // escreverMensagemParaCliente(msg);
                 break;
             default:
                 escreverMensagemParaCliente("ERRO AO PROCESSAR!");
@@ -165,8 +165,43 @@ void *db_select(void *param){
 
     cout << "Registro recebido para selecionar: " << buffer << endl;
 
+    vector<string> partes = getPartes(buffer);
+
     pthread_mutex_lock(&mutex);
-    // NAO ESQUECER DE COLOCAR AQUI A LOGICA
+    string temp = "\n";
+    bool achou = false;
+
+    // Select TUDO
+    if(partes[0] == "1"){
+        for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
+            temp += to_string(it->id) + " - Nome = " + it->nome + "\n";
+            achou = true;
+        }
+        if(!achou) temp += "Sem registros no sistema.";
+
+    // Select ID
+    }else if(partes[0] == "2"){
+        for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
+            if(it->id == stoi(partes[1])){
+                cout<<"a";
+                temp += to_string(it->id) + " - Nome = " + it->nome + "\n";
+                achou = true;
+            }
+        }
+        if(!achou) temp += "Sem registro com id " + partes[1] + " no sistema.";
+    // Select NOME
+    }else{
+        for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
+            if(it->nome == partes[1]){
+                temp += to_string(it->id) + " - Nome = " + it->nome + "\n";
+                achou = true;
+            }
+        }
+        if(!achou) temp += "Sem registro com nome " + partes[1] + " no sistema.";
+    }
+
+    const char* msg = temp.c_str();
+    escreverMensagemParaCliente(msg);
     pthread_mutex_unlock(&mutex);
     pthread_exit(0);
 }
