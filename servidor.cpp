@@ -45,18 +45,18 @@ int main(){
         switch(opcao){
             case '1':
                 pthread_create(&tr_i, &attr, db_insert, NULL);
-                //pthread_join(tr_i, NULL); 
-                escreverMensagemParaCliente("\nInserido com sucesso!");
+                //pthread_join(tr_i, NULL);
+                // escreverMensagemParaCliente("\nInserido com sucesso!");
                 break;
             case '2':
                 pthread_create(&tr_u, &attr, db_update, NULL);
                 //pthread_join(tr_u, NULL);
-                escreverMensagemParaCliente("Atualizado com sucesso!");
+                // escreverMensagemParaCliente("Atualizado com sucesso!");
                 break;
             case '3':
                 pthread_create(&tr_d, &attr, db_delete, NULL);
                 //pthread_join(tr_d, NULL);
-                escreverMensagemParaCliente("Deletado com sucesso!");
+                // escreverMensagemParaCliente("Deletado com sucesso!");
                 break;
             case '4':
                 pthread_create(&tr_s, &attr, db_select, NULL);
@@ -101,6 +101,7 @@ void *db_insert(void *param){
     pthread_mutex_lock(&mutex);
     bancoDeDados.push_back(novoRegistro);
     cout << "Registro INSERIDO: ID = " << novoRegistro.id << ", Nome = " << novoRegistro.nome << endl;
+    escreverMensagemParaCliente("\nRegistro inserido com sucesso!");
     pthread_mutex_unlock(&mutex);
     pthread_exit(0);
 }
@@ -124,13 +125,15 @@ void *db_update(void *param){
         }
     }else{
         for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
-            if (it->nome == partes[0]) {
+            if (it->nome == partes[2]) {
                 cout << "Registro ATUALIZADO: ID = " << it->id << ", Nome = " << it->nome << endl;
                 it->id = stoi(partes[1]);
                 break;
             }
         }
     }
+    
+    escreverMensagemParaCliente("Registro atualizado com sucesso!");
     pthread_mutex_unlock(&mutex);
     pthread_exit(0);
 }
@@ -153,6 +156,8 @@ void *db_delete(void *param){
             break;
         }
     }
+
+    escreverMensagemParaCliente("Registro deletado com sucesso!");
     pthread_mutex_unlock(&mutex);
     pthread_exit(0);
 }
@@ -183,7 +188,6 @@ void *db_select(void *param){
     }else if(partes[0] == "2"){
         for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
             if(it->id == stoi(partes[1])){
-                cout<<"a";
                 temp += to_string(it->id) + " - Nome = " + it->nome + "\n";
                 achou = true;
             }
