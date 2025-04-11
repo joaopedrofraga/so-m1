@@ -88,6 +88,7 @@ vector<string> getPartes(char buffer[100]){
 
 // FEITO
 void *db_insert(void *param){
+    pthread_mutex_lock(&mutex);
     int fd = open("/tmp/fifo_insert_registro", O_RDONLY);
     char buffer[100] = {0}; 
     read(fd, buffer, sizeof(buffer));
@@ -98,7 +99,7 @@ void *db_insert(void *param){
     novoRegistro.id = stoi(partes[0]);
     novoRegistro.nome = partes[1];
 
-    pthread_mutex_lock(&mutex);
+
     bancoDeDados.push_back(novoRegistro);
     cout << "Registro INSERIDO: ID = " << novoRegistro.id << ", Nome = " << novoRegistro.nome << endl;
     escreverMensagemParaCliente("\nRegistro inserido com sucesso!");
@@ -108,13 +109,13 @@ void *db_insert(void *param){
 
 // FEITO
 void *db_update(void *param){
+    pthread_mutex_lock(&mutex);
     int fd = open("/tmp/fifo_update_registro", O_RDONLY);
     char buffer[100] = {0}; 
     read(fd, buffer, sizeof(buffer));
     close(fd);
     vector<string> partes = getPartes(buffer);
 
-    pthread_mutex_lock(&mutex);
     if(partes[0] == "1"){
         for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
             if (it->id == stoi(partes[1])) {
@@ -132,7 +133,6 @@ void *db_update(void *param){
             }
         }
     }
-    
     escreverMensagemParaCliente("Registro atualizado com sucesso!");
     pthread_mutex_unlock(&mutex);
     pthread_exit(0);
@@ -140,15 +140,13 @@ void *db_update(void *param){
 
 // FEITO
 void *db_delete(void *param){
+    pthread_mutex_lock(&mutex);
     int fd = open("/tmp/fifo_delete_registro", O_RDONLY);
     char buffer[100] = {0}; 
     read(fd, buffer, sizeof(buffer));
     close(fd);
     vector<string> partes = getPartes(buffer);
 
-    cout << partes[0] << endl;
-
-    pthread_mutex_lock(&mutex);
     for (auto it = bancoDeDados.begin(); it != bancoDeDados.end(); ++it) {
         if (it->id == stoi(partes[0])) {
             cout << "Registro DELETADO: ID = " << it->id << ", Nome = " << it->nome << endl;
@@ -163,6 +161,7 @@ void *db_delete(void *param){
 }
 
 void *db_select(void *param){
+    pthread_mutex_lock(&mutex);
     int fd = open("/tmp/fifo_select_registro", O_RDONLY);
     char buffer[100] = {0}; 
     read(fd, buffer, sizeof(buffer));
@@ -172,7 +171,6 @@ void *db_select(void *param){
 
     vector<string> partes = getPartes(buffer);
 
-    pthread_mutex_lock(&mutex);
     string temp = "\n";
     bool achou = false;
 
