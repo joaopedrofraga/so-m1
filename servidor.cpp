@@ -101,9 +101,9 @@ void *db_insert(void *param){
 
 
     bancoDeDados.push_back(novoRegistro);
+    pthread_mutex_unlock(&mutex);
     cout << "Registro INSERIDO: ID = " << novoRegistro.id << ", Nome = " << novoRegistro.nome << endl;
     escreverMensagemParaCliente("\nRegistro inserido com sucesso!");
-    pthread_mutex_unlock(&mutex);
     pthread_exit(0);
 }
 
@@ -133,8 +133,8 @@ void *db_update(void *param){
             }
         }
     }
-    escreverMensagemParaCliente("Registro atualizado com sucesso!");
     pthread_mutex_unlock(&mutex);
+    escreverMensagemParaCliente("Registro atualizado com sucesso!");
     pthread_exit(0);
 }
 
@@ -153,10 +153,9 @@ void *db_delete(void *param){
             bancoDeDados.erase(it);
             break;
         }
-    }
-
-    escreverMensagemParaCliente("Registro deletado com sucesso!");
+    }    
     pthread_mutex_unlock(&mutex);
+    escreverMensagemParaCliente("Registro deletado com sucesso!");
     pthread_exit(0);
 }
 
@@ -203,7 +202,8 @@ void *db_select(void *param){
     }
 
     const char* msg = temp.c_str();
-    escreverMensagemParaCliente(msg);
+    
     pthread_mutex_unlock(&mutex);
+    escreverMensagemParaCliente(msg);
     pthread_exit(0);
 }
